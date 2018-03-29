@@ -1,17 +1,16 @@
 __coverage__
 __tests__
-.babelrc
-.eslintrc.yml
 .emdaer
 .github
+docs
+.babelrc
+.eslintrc.yml
+.flowconfig
 .gitignore
 .prettierrc
 .travis.yml
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
-docs
-other
-testSetup.js
 yark.lock
 
 !lib

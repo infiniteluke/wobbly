@@ -4,5 +4,4 @@
 *.js.meta
 node_modules/
 .vscode
-dist
 lib
