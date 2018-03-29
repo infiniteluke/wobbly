@@ -47,7 +47,7 @@ should be installed as one of your project&#39;s <code>dependencies</code>:</p>
 <p>TDB</p>
 <h2 id="contributing">Contributing</h2>
 <p>If you&#39;d like to make wobbly 〰️ better, please read our <a href="./CONTRIBUTING.md">guide to contributing</a>.</p>
-<p>These wonderful people have contributed to wobblyin one way or another:</p>
+<p>These wonderful people have contributed to wobbly 〰️ in one way or another:</p>
 <details>
 <summary><strong>Contributors</strong></summary><br>
 <a title="I build multi-channel publishing systems and web applications at @fourkitchens." href="https://github.com/infiniteluke">

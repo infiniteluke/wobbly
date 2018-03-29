@@ -90,7 +90,7 @@ TDB
 
 If you'd like to make wobbly 〰️ better, please read our [guide to contributing](./CONTRIBUTING.md).
 
-These wonderful people have contributed to wobblyin one way or another:
+These wonderful people have contributed to wobbly 〰️ in one way or another:
 <!--emdaer-p
   - '@emdaer/plugin-contributors-details-github'
 -->
