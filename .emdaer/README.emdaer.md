@@ -48,7 +48,7 @@
   - shields:
       - alt: 'Twitter'
         image: 'twitter/url/https/github.com/infiniteluke/wobbly.svg'
-        link: 'https://twitter.com/intent/tweet?text=Step%20through%20an%20index%20with%20style%20with%20wobbly.%20Check%20it%20out!%20https://github.com/infiniteluke/wobbly%20〰️&url=%5Bobject%20Object%5D'
+        link: 'https://twitter.com/intent/tweet?text=Parallax%20all%20the%20things%20with%20with%20wobbly%20〰️%20for%20react-vr!%20Check%20it%20out!%20https://github.com/infiniteluke/wobbly'
         style: 'social'
       - alt: 'GitHub stars'
         image: 'github/stars/infiniteluke/wobbly.svg'
@@ -56,7 +56,7 @@
         style: 'social'
 -->
 
-wobbly manages the state needed to calculate `x, y` rotations for a parallax effect, allowing you to focus the UI, and apply the effect how you want. It uses the [function as child](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9) and "prop getter" patterns, which gives you maximum flexibility with a minimal API.
+wobbly 〰️ manages the state needed to calculate `x, y` rotations for a parallax effect, allowing you to focus the UI, and apply the effect how you want. It uses the [function as child](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9) and "prop getter" patterns, which gives you maximum flexibility with a minimal API.
 
 ## Table of Contents
 <!--emdaer-t
