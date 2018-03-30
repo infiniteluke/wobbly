@@ -1,4 +1,4 @@
-import { unwrapArray, linearTransform } from '../src/utils';
+import { unwrapArray, linearTransform, callAll } from '../src/utils';
 
 test('unWrapArray returns the first item if an array', () => {
   expect(unwrapArray([1, 2])).toBe(1);
@@ -12,4 +12,12 @@ test('linearTransform returns a value between the lower/upper bounds', () => {
   expect(val).toBeGreaterThan(lower);
   expect(val).toBeLessThan(upper);
   expect(val).toBe(8);
+});
+
+test('callAll calls all functions', () => {
+  const doThing = jest.fn();
+  const doAnotherThing = jest.fn();
+  callAll(doThing, doAnotherThing)('test');
+  expect(doThing).toBeCalledWith('test');
+  expect(doAnotherThing).toBeCalledWith('test');
 });

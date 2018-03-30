@@ -3,14 +3,28 @@
 import React, { Component } from 'react';
 import throttle from 'lodash.throttle';
 
-import { linearTransform, unwrapArray } from './utils';
+import { linearTransform, unwrapArray, callAll, noop } from './utils';
+
+type StateAndHelpers = {
+  // Prop Getters
+  getWrapperProps: () => {},
+  getWrapperTransformStyle: () => {},
+  // State
+  x: number,
+  y: number,
+};
+
+type RenderProp = StateAndHelpers => {};
 
 type Props = {
-  children: number,
   moveThrottleMs: number,
   parallaxDegreeLowerBound: number,
   parallaxDegreeUpperBound: number,
   slop: number,
+  initialRotateX: number,
+  initialRotateY: number,
+  children: RenderProp,
+  render: RenderProp,
 };
 
 type State = {
@@ -35,7 +49,7 @@ type SytheticMoveEvent = {
  * <p align="center">parallax all the things in react-vr</p>
  * <hr />
  * </br>
- * wobbly manages the state needed to calculate `x, y` rotations for a parallax effect, allowing you to focus the UI, and apply the effect how you want.
+ * wobbly manages the state needed to calculate `x, y` rotations for a parallax effect, allowing you to focus the UI, and apply the effect how/where you want.
  */
 class Wobbly extends Component<Props, State> {
   /**
@@ -45,11 +59,15 @@ class Wobbly extends Component<Props, State> {
    * @property {number} [parallaxDegreeLowerBound=-15] - lower rotation degree bound
    * @property {number} [parallaxDegreeUpperBound=15] - upper rotation degree bound
    * @property {number} [slop=0.1] - slop to add to wrapper via prop getter
+   * @property {number} [initialRotateX=0] - initial rotateX value
+   * @property {number} [initialRotateY=0] - initial rotateY value
    * @see {@link https://facebook.github.io/react-vr/docs/view.html#hitslop|hitSlop react-vr docs}
    */
   static defaultProps = {
     parallaxDegreeLowerBound: -15,
     parallaxDegreeUpperBound: 15,
+    initialRotateX: 0,
+    initialRotateY: 0,
     slop: 0.1,
   };
 
@@ -60,8 +78,8 @@ class Wobbly extends Component<Props, State> {
    */
   state = {
     rotation: {
-      x: 0,
-      y: 0,
+      x: this.props.initialRotateX,
+      y: this.props.initialRotateY,
     },
   };
 
@@ -98,6 +116,15 @@ class Wobbly extends Component<Props, State> {
     this.updateParallax(event.nativeEvent.offset);
   };
 
+  handleExit = (): void => {
+    this.setState(() => ({
+      rotation: {
+        x: this.props.initialRotateX,
+        y: this.props.initialRotateY,
+      },
+    }));
+  };
+
   /**
    * The state of wobbly and prop getters are exposed as a parameter to the render prop.
    *
@@ -108,8 +135,10 @@ class Wobbly extends Component<Props, State> {
    * @property {number} x - state - x rotation state value
    * @property {number} y - state - y rotation state value
    */
-  getWrapperProps = () => ({
-    onMove: this.handleMove,
+  getWrapperProps = (props = {}) => ({
+    ...props,
+    onMove: callAll(props.onMove, this.handleMove),
+    onExit: callAll(props.onExit, this.handleExit),
     hitSlop: {
       top: this.props.slop,
       bottom: this.props.slop,
@@ -129,7 +158,7 @@ class Wobbly extends Component<Props, State> {
    * @return {StateAndHelpers}
    *  The state and helper functions exposed as a parameter to the render callback
    */
-  getStateAndHelpers() {
+  getStateAndHelpers(): StateAndHelpers {
     return {
       // Prop Getters
       getWrapperProps: this.getWrapperProps,
@@ -141,8 +170,15 @@ class Wobbly extends Component<Props, State> {
   }
 
   render() {
-    const renderProp = unwrapArray(this.props.children);
-    return renderProp(this.getStateAndHelpers());
+    const children = unwrapArray(
+      this.props.render || this.props.children,
+      noop
+    );
+    const element = unwrapArray(children(this.getStateAndHelpers()));
+    if (!element) {
+      return null;
+    }
+    return element;
   }
 }
 

@@ -27,13 +27,25 @@ export function linearTransform(
 }
 
 /**
+ * Calls all functions
+ * @private
+ * @param {Array<function>} fns - functions to call in sequence
+ * @returns {function}
+ */
+export function callAll(...fns: Array<() => {}>): () => {} {
+  return (...args) => fns.forEach(fn => fn && fn(...args));
+}
+
+/**
  * Takes an argument and if it's an array, returns the first item in the array
  * otherwise returns the argument
  * @private
  *
  * @param {*} arg the maybe-array
- * @return {*} the arg or it's first item
+ * @returns {*} the arg or it's first item
  */
 export function unwrapArray(arg: any | Array<any>): any {
   return Array.isArray(arg) ? arg[0] : arg;
 }
+
+export function noop() {}

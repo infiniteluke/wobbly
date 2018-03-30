@@ -56,7 +56,7 @@
         style: 'social'
 -->
 
-wobbly 〰️ manages the state needed to calculate `x, y` rotations for a parallax effect, allowing you to focus the UI, and apply the effect how you want. It uses the [function as child](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9) and "prop getter" patterns, which gives you maximum flexibility with a minimal API.
+wobbly 〰️ manages the state needed to calculate `x, y` rotations for a parallax effect, allowing you to focus the UI, and apply the effect how/where you want.. It uses the [function as child](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9) and "prop getter" patterns, which gives you maximum flexibility with a minimal API.
 
 ## Table of Contents
 <!--emdaer-t
@@ -75,16 +75,74 @@ npm install --save wobbly
 > This package also depends on `react-vr`, `react` and `prop-types`. Please make sure you have those installed as well.
 
 ## Usage
-TDB
+```jsx
+import Wobbly from 'wobbly';
+import { Text, View, VrButton } from 'react-vr';
+
+function ParallaxButton() {
+  return (
+        <Wobbly
+          // These props control how extreme wobbly 〰 is. Default to -15, 15 respectively.
+          parallaxDegreeLowerBound={-20}
+          parallaxDegreeUpperBound={20}
+          // These props control the intial rotation. Default to 0, 0 respectively.
+          initialRotateX={-10}
+          initialRotateY={10}
+          // The render prop is called on each render providing prop getters and state to be used in your UI.
+          // This function can alternatively be called as a child prop <Wobbly>{(stateAndHelpers) => {...}}</Wobbly>
+          render={({ getWrapperProps, getWrapperTransformStyle }) => (
+            <VrButton
+              style={{
+                backgroundColor: 'darkorchid',
+                padding: 0.2,
+                borderRadius: 0.03,
+                // Spread the transform styles into an element you want to make wobbly 〰
+                // This adds rotateX and a rotateY objects respectively
+                transform: [...getWrapperTransformStyle()],
+              }}
+              // Spread the wrapper props into an element whose onMove event will control the parallax effect.
+              // You can also pass an onMove handler to be called before wobbly's internal onMove.
+              // ...getWrapperProps({ onMove: (event) => {}})
+              {...getWrapperProps()}
+            >
+              <Text
+                style={{
+                  fontSize: 0.3,
+                  color: 'blanchedalmond',
+                }}
+              >
+                Wobbly
+              </Text>
+            </VrButton>
+          )}
+        />
+  );
+}
+```
+
+...creates something like this:
+![wobbly button example](https://user-images.githubusercontent.com/1127238/38117939-a8f9ac68-336c-11e8-8fb3-fd7012028ff8.gif)
 
 ## Props
-TDB
+See the [API Docs](https://infiniteluke.github.io/wobbly) for information on the props exposed by this package. The usage example above is not an exhaustive list.
 
 ## How To Render
-TDB
+wobbly 〰️ uses the child callback render function pattern. This is where you render whatever you want to based on the state of wobbly which is passed to the callback as parameters. The function is passed as the child prop of the Wobbly component:
+```jsx
+<Wobbly>
+  {({/* parameters here */}) => (/* your render code here*/)}
+</Wobbly>
+```
+or can be called from the render prop
+```jsx
+<Wobbly
+  render= {({/* parameters here */}) => (/* your render code here*/)}
+/>
+```
 
-## Examples
-TDB
+The paramters of this function can be split into two categories: State and Prop Getters.
+
+See the [API Docs](https://infiniteluke.github.io/dub-step/#stateandhelpers) for a list of these properties.
 
 ## Contributing
 
