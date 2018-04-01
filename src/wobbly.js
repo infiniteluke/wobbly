@@ -1,28 +1,23 @@
 /* @flow */
 
+import type { StateAndHelpers, RenderProp, SytheticMoveEvent } from './types';
+
 import React, { Component } from 'react';
+import { Animated } from 'react-vr';
 import throttle from 'lodash.throttle';
 
-import { linearTransform, unwrapArray, callAll, noop } from './utils';
+import { unwrapArray, callAll, noop } from './utils';
 
-type StateAndHelpers = {
-  // Prop Getters
-  getWrapperProps: () => {},
-  getWrapperTransformStyle: () => {},
-  // State
-  x: number,
-  y: number,
-};
-
-type RenderProp = StateAndHelpers => {};
+const MOVE_INPUT_RANGE = [0, 1];
 
 type Props = {
-  moveThrottleMs: number,
   parallaxDegreeLowerBound: number,
   parallaxDegreeUpperBound: number,
   slop: number,
-  initialRotateX: number,
-  initialRotateY: number,
+  initialX: number,
+  initialY: number,
+  onExitSpringFriction: number,
+  onExitSpringTension: number,
   children: RenderProp,
   render: RenderProp,
 };
@@ -32,11 +27,6 @@ type State = {
     x: number,
     y: number,
   },
-};
-
-type SytheticMoveEvent = {
-  persist: () => {},
-  nativeEvent: { offset: [number, number] },
 };
 
 /**
@@ -54,75 +44,64 @@ type SytheticMoveEvent = {
 class Wobbly extends Component<Props, State> {
   /**
    * @type {object}
-   * @private
+   *
+   * @typedef {object} Props
    *
    * @property {number} [parallaxDegreeLowerBound=-15] - lower rotation degree bound
    * @property {number} [parallaxDegreeUpperBound=15] - upper rotation degree bound
    * @property {number} [slop=0.1] - slop to add to wrapper via prop getter
-   * @property {number} [initialRotateX=0] - initial rotateX value
-   * @property {number} [initialRotateY=0] - initial rotateY value
+   * @property {number} [initialX=0] - initial x value in view, between 0 and 1
+   * @property {number} [initialY=0] - initial y value in view, between 0 and 1
+   * @property {number} [onExitSpringFriction=4] - controls "bounciness"/overshoot of the onExit animation
+   * @property {number} [onExitSpringTension=40] - controls speed of onExit animation
+   * @property {function} [children] - Is called with the StateAndHelpers of wobbly.
+   * @property {function} [render] - Is called with the StateAndHelpers of wobbly.
    * @see {@link https://facebook.github.io/react-vr/docs/view.html#hitslop|hitSlop react-vr docs}
    */
   static defaultProps = {
     parallaxDegreeLowerBound: -15,
     parallaxDegreeUpperBound: 15,
-    initialRotateX: 0,
-    initialRotateY: 0,
     slop: 0.1,
+    initialX: 0.5,
+    initialY: 0.5,
+    onExitSpringFriction: 4,
+    onExitSpringTension: 40,
   };
 
   /**
    * @type {object}
    * @private
-   * @property {Object} rotation - state - The current x,y rotation state
+   * @property {Object} rotation - state - The current x,y state
    */
   state = {
     rotation: {
-      x: this.props.initialRotateX,
-      y: this.props.initialRotateY,
+      x: new Animated.Value(this.props.initialX),
+      y: new Animated.Value(this.props.initialY),
     },
   };
 
-  /**
-   * Sets the rotation state with the transformed x,y values throttled
-   * @private
-   *
-   * @param {number[]} offsets - array of values representing the move offset
-   * @returns void
-   */
-  updateParallax = throttle((offsets: [number, number]) => {
-    this.setState(() => ({
-      rotation: {
-        x: linearTransform(
-          offsets[1],
-          0,
-          1,
-          this.props.parallaxDegreeLowerBound,
-          this.props.parallaxDegreeUpperBound
-        ),
-        y: linearTransform(
-          offsets[0],
-          0,
-          1,
-          this.props.parallaxDegreeLowerBound,
-          this.props.parallaxDegreeUpperBound
-        ),
-      },
-    }));
-  }, this.props.moveThrottleMs);
+  parallaxDegreeRange = [
+    this.props.parallaxDegreeLowerBound,
+    this.props.parallaxDegreeUpperBound,
+  ];
 
-  handleMove = (event: SytheticMoveEvent): void => {
-    event.persist();
-    this.updateParallax(event.nativeEvent.offset);
-  };
+  interpolateMoveOffset = (value: Animated.Value) =>
+    value.interpolate({
+      inputRange: MOVE_INPUT_RANGE,
+      outputRange: this.parallaxDegreeRange,
+    });
 
-  handleExit = (): void => {
-    this.setState(() => ({
-      rotation: {
-        x: this.props.initialRotateX,
-        y: this.props.initialRotateY,
-      },
-    }));
+  handleExit = () => {
+    Animated.spring(this.state.rotation.x, {
+      toValue: this.props.initialX,
+      friction: this.props.onExitSpringFriction,
+      tension: this.props.onExitSpringTension,
+    }).start();
+    Animated.spring(this.state.rotation.y, {
+      toValue: this.props.initialY,
+      friction: this.props.onExitSpringFriction,
+      tension: this.props.onExitSpringTension,
+    }).start();
   };
 
   /**
@@ -130,14 +109,28 @@ class Wobbly extends Component<Props, State> {
    *
    * @typedef {object} StateAndHelpers
    *
-   * @property {function} getWrapperProps - prop getter - returns the props to spread into the element to which a parallax effect should be added
-   * @property {function} getWrapperTransformStyle - prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on the element to which a parallax effect should be added.
-   * @property {number} x - state - x rotation state value
-   * @property {number} y - state - y rotation state value
+   * @property {function} getMoveWrapperProps - prop getter - returns the props to spread into the element which controls the parallax effect by moving over it.
+   * @property {function} getWrapperTransformStyle - prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on an "Animated" element to which a parallax effect should be added. NOTE: This element must be "Animated" like "Animated.VrButton".
+   * @property {number} x - state - x state value
+   * @property {number} y - state - y state value
    */
-  getWrapperProps = (props = {}) => ({
+  getMoveWrapperProps = (
+    props: { onMove: () => void, onExit: () => void } = {
+      onMove: () => {},
+      onExit: () => {},
+    }
+  ) => ({
     ...props,
-    onMove: callAll(props.onMove, this.handleMove),
+    onMove: callAll(
+      props.onMove,
+      Animated.event([
+        {
+          nativeEvent: {
+            offset: [this.state.rotation.y, this.state.rotation.x],
+          },
+        },
+      ])
+    ),
     onExit: callAll(props.onExit, this.handleExit),
     hitSlop: {
       top: this.props.slop,
@@ -147,8 +140,12 @@ class Wobbly extends Component<Props, State> {
     },
   });
   getWrapperTransformStyle = () => [
-    { rotateX: this.state.rotation.x },
-    { rotateY: this.state.rotation.y },
+    {
+      rotateX: this.interpolateMoveOffset(this.state.rotation.x),
+    },
+    {
+      rotateY: this.interpolateMoveOffset(this.state.rotation.y),
+    },
   ];
 
   /**
@@ -161,7 +158,7 @@ class Wobbly extends Component<Props, State> {
   getStateAndHelpers(): StateAndHelpers {
     return {
       // Prop Getters
-      getWrapperProps: this.getWrapperProps,
+      getMoveWrapperProps: this.getMoveWrapperProps,
       getWrapperTransformStyle: this.getWrapperTransformStyle,
       // State
       x: this.state.rotation.x,
@@ -171,8 +168,7 @@ class Wobbly extends Component<Props, State> {
 
   render() {
     const children = unwrapArray(
-      this.props.render || this.props.children,
-      noop
+      this.props.render || this.props.children || noop
     );
     const element = unwrapArray(children(this.getStateAndHelpers()));
     if (!element) {

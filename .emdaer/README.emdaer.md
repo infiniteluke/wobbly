@@ -1,8 +1,8 @@
 <h1 align="center">
 <!--emdaer-p
-- '@emdaer/plugin-value-from-package'
-- value: name
---> 〰️
+  - '@emdaer/plugin-value-from-package'
+  - value: name
+-->
     </br>
     <img src="https://user-images.githubusercontent.com/1127238/38072922-8250c22a-32dd-11e8-8259-fb8ea3346dfc.png" alt="wobbly logo" title="wobbly logo" width="100">
 </h1>
@@ -77,7 +77,7 @@ npm install --save wobbly
 ## Usage
 ```jsx
 import Wobbly from 'wobbly';
-import { Text, View, VrButton } from 'react-vr';
+import { Text, View, VrButton, Animated } from 'react-vr';
 
 function ParallaxButton() {
   return (
@@ -86,12 +86,13 @@ function ParallaxButton() {
           parallaxDegreeLowerBound={-20}
           parallaxDegreeUpperBound={20}
           // These props control the intial rotation. Default to 0, 0 respectively.
-          initialRotateX={-10}
-          initialRotateY={10}
+          initialX={-10}
+          initialY={10}
           // The render prop is called on each render providing prop getters and state to be used in your UI.
           // This function can alternatively be called as a child prop <Wobbly>{(stateAndHelpers) => {...}}</Wobbly>
-          render={({ getWrapperProps, getWrapperTransformStyle }) => (
-            <VrButton
+          render={({ getMoveWrapperProps, getWrapperTransformStyle }) => (
+            <Animated.VrButton
+              // NOTE: The element you spread the transformation style into must be an "Animated" element.
               style={{
                 backgroundColor: 'darkorchid',
                 padding: 0.2,
@@ -101,9 +102,9 @@ function ParallaxButton() {
                 transform: [...getWrapperTransformStyle()],
               }}
               // Spread the wrapper props into an element whose onMove event will control the parallax effect.
-              // You can also pass an onMove handler to be called before wobbly's internal onMove.
-              // ...getWrapperProps({ onMove: (event) => {}})
-              {...getWrapperProps()}
+              // You can also pass an onMove/onExit handler to be called before wobbly's internal onMove/onExit.
+              // ...getMoveWrapperProps({ onMove: (event) => {}})
+              {...getMoveWrapperProps()}
             >
               <Text
                 style={{
@@ -113,14 +114,14 @@ function ParallaxButton() {
               >
                 Wobbly
               </Text>
-            </VrButton>
+            </Animated.VrButton>
           )}
         />
   );
 }
 ```
 
-...creates something like this:
+...creates something like this:</br>
 ![wobbly button example](https://user-images.githubusercontent.com/1127238/38117939-a8f9ac68-336c-11e8-8fb3-fd7012028ff8.gif)
 
 ## Props

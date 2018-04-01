@@ -35,6 +35,16 @@
               
                 
                 <li><a
+                  href='#props'
+                  class="">
+                  Props
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#stateandhelpers'
                   class="">
                   StateAndHelpers
@@ -121,6 +131,125 @@ wobbly manages the state needed to calculate `x, y` rotations for a parallax eff
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='props'>
+      Props
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>Props</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>parallaxDegreeLowerBound</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : lower rotation degree bound
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>parallaxDegreeUpperBound</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : upper rotation degree bound
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>slop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : slop to add to wrapper via prop getter
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>initialX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : initial x value in view, between 0 and 1
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>initialY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : initial y value in view, between 0 and 1
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onExitSpringFriction</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : controls "bounciness"/overshoot of the onExit animation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onExitSpringTension</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : controls speed of onExit animation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>children</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>?)</code>
+          : Is called with the StateAndHelpers of wobbly.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>render</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>?)</code>
+          : Is called with the StateAndHelpers of wobbly.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='stateandhelpers'>
       StateAndHelpers
     </h3>
@@ -155,29 +284,29 @@ wobbly manages the state needed to calculate `x, y` rotations for a parallax eff
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>getWrapperProps</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
-          : prop getter - returns the props to spread into the element to which a parallax effect should be added
+          <span class='code bold'>getMoveWrapperProps</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          : prop getter - returns the props to spread into the element which controls the parallax effect by moving over it.
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>getWrapperTransformStyle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
-          : prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on the element to which a parallax effect should be added.
+          : prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on an "Animated" element to which a parallax effect should be added. NOTE: This element must be "Animated" like "Animated.VrButton".
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-          : state - x rotation state value
+          : state - x state value
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-          : state - y rotation state value
+          : state - y state value
 
           
         </div>
