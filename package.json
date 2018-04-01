@@ -33,7 +33,8 @@
     "precommit": "lint-staged && npm run lint && npm run test && npm run documentation && git add docs && npm run readme"
   },
   "peerDependencies": {
-    "react": ">=16.0.0"
+    "react": ">=16.0.0",
+    "react-vr": ">=2.0.0"
   },
   "devDependencies": {
     "@emdaer/cli": "^2.0.0",
@@ -100,7 +101,5 @@
       "git add"
     ]
   },
-  "dependencies": {
-    "lodash.throttle": "^4.1.1"
-  }
+  "dependencies": {}
 }

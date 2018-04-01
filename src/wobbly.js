@@ -4,7 +4,6 @@ import type { StateAndHelpers, RenderProp, SytheticMoveEvent } from './types';
 
 import React, { Component } from 'react';
 import { Animated } from 'react-vr';
-import throttle from 'lodash.throttle';
 
 import { unwrapArray, callAll, noop } from './utils';
 
