@@ -56,9 +56,6 @@ function ParallaxButton() {
       // These props control how extreme wobbly 〰 is. Default to -15, 15 respectively.
       parallaxDegreeLowerBound={-20}
       parallaxDegreeUpperBound={20}
-      // These props control the intial rotation. Default to 0, 0 respectively.
-      initialX={-10}
-      initialY={10}
       // The render prop is called on each render providing prop getters and state to be used in your UI.
       // This function can alternatively be called as a child prop <Wobbly>{(stateAndHelpers) => {...}}</Wobbly>
       render={({ getMoveWrapperProps, getWrapperTransformStyle }) => (
