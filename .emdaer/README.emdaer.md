@@ -100,8 +100,8 @@ function ParallaxButton() {
               }}
               // Spread the wrapper props into an element whose onMove event will control the parallax effect.
               // You can also pass an onMove/onExit handler to be called before wobbly's internal onMove/onExit.
-              // ...getMoveWrapperProps({ onMove: (event) => {}})
-              {...getMoveWrapperProps()}
+              // ...getMoveTargetProps({ onMove: (event) => {}})
+              {...getMoveTargetProps()}
             >
               <Text
                 style={{
