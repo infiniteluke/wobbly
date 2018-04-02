@@ -58,7 +58,7 @@ function ParallaxButton() {
       parallaxDegreeUpperBound={20}
       // The render prop is called on each render providing prop getters and state to be used in your UI.
       // This function can alternatively be called as a child prop <Wobbly>{(stateAndHelpers) => {...}}</Wobbly>
-      render={({ getMoveWrapperProps, getWrapperTransformStyle }) => (
+      render={({ getMoveTargetProps, getWobblyTransformStyle }) => (
         <Animated.VrButton
           // NOTE: The element you spread the transformation style into must be an "Animated" element.
           style={{
@@ -67,7 +67,7 @@ function ParallaxButton() {
             borderRadius: 0.03,
             // Spread the transform styles into an element you want to make wobbly 〰
             // This adds rotateX and a rotateY objects respectively
-            transform: [...getWrapperTransformStyle()],
+            transform: [...getWobblyTransformStyle()],
           }}
           // Spread the wrapper props into an element whose onMove event will control the parallax effect.
           // You can also pass an onMove/onExit handler to be called before wobbly's internal onMove/onExit.

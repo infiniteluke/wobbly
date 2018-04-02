@@ -2,13 +2,13 @@
 
 export type StateAndHelpers = {
   // Prop Getters
-  getWrapperProps: ({ onMove: () => void, onExit: () => void }) => {
+  getMoveTargetProps: ({ onMove: () => void, onExit: () => void }) => {
     [string]: any,
     onMove: () => void,
     onExit: () => void,
     hitSlop: { top: number, bottom: number, left: number, right: number },
   },
-  getWrapperTransformStyle: () => [
+  getWobblyTransformStyle: () => [
     {
       rotateX: number,
     },

@@ -8,6 +8,8 @@ import { Animated } from 'react-vr';
 import { unwrapArray, callAll, noop } from './utils';
 
 const MOVE_INPUT_RANGE = [0, 1];
+const negativeValue = new Animated.Value(-1);
+const positiveValue = new Animated.Value(1);
 
 type Props = {
   parallaxDegreeLowerBound: number,
@@ -17,6 +19,8 @@ type Props = {
   initialY: number,
   onExitSpringFriction: number,
   onExitSpringTension: number,
+  flipX: boolean,
+  flipY: boolean,
   children: RenderProp,
   render: RenderProp,
 };
@@ -53,6 +57,8 @@ class Wobbly extends Component<Props, State> {
    * @property {number} [initialY=0] - initial y value in view, between 0 and 1
    * @property {number} [onExitSpringFriction=4] - controls "bounciness"/overshoot of the onExit animation
    * @property {number} [onExitSpringTension=40] - controls speed of onExit animation
+   * @property {number} [flipX=false] - flip the sign on the x rotation transform style value
+   * @property {number} [flipY=false] - flip the sign on the y rotation transform style value
    * @property {function} [children] - Is called with the StateAndHelpers of wobbly.
    * @property {function} [render] - Is called with the StateAndHelpers of wobbly.
    * @see {@link https://facebook.github.io/react-vr/docs/view.html#hitslop|hitSlop react-vr docs}
@@ -65,6 +71,8 @@ class Wobbly extends Component<Props, State> {
     initialY: 0.5,
     onExitSpringFriction: 4,
     onExitSpringTension: 40,
+    flipX: false,
+    flipY: false,
   };
 
   /**
@@ -83,6 +91,9 @@ class Wobbly extends Component<Props, State> {
     this.props.parallaxDegreeLowerBound,
     this.props.parallaxDegreeUpperBound,
   ];
+
+  xSign = this.props.flipX ? negativeValue : positiveValue;
+  ySign = this.props.flipY ? negativeValue : positiveValue;
 
   interpolateMoveOffset = (value: Animated.Value) =>
     value.interpolate({
@@ -108,12 +119,12 @@ class Wobbly extends Component<Props, State> {
    *
    * @typedef {object} StateAndHelpers
    *
-   * @property {function} getMoveWrapperProps - prop getter - returns the props to spread into the element which controls the parallax effect by moving over it.
-   * @property {function} getWrapperTransformStyle - prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on an "Animated" element to which a parallax effect should be added. NOTE: This element must be "Animated" like "Animated.VrButton".
+   * @property {function} getMoveTargetProps - prop getter - returns the props to spread into the element which controls the parallax effect by moving over it.
+   * @property {function} getWobblyTransformStyle - prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on an "Animated" element to which a parallax effect should be added. NOTE: This element must be "Animated" like "Animated.VrButton".
    * @property {number} x - state - x state value
    * @property {number} y - state - y state value
    */
-  getMoveWrapperProps = (
+  getMoveTargetProps = (
     props: { onMove: () => void, onExit: () => void } = {
       onMove: () => {},
       onExit: () => {},
@@ -138,12 +149,18 @@ class Wobbly extends Component<Props, State> {
       right: this.props.slop,
     },
   });
-  getWrapperTransformStyle = () => [
+  getWobblyTransformStyle = () => [
     {
-      rotateX: this.interpolateMoveOffset(this.state.rotation.x),
+      rotateX: Animated.multiply(
+        this.xSign,
+        this.interpolateMoveOffset(this.state.rotation.x)
+      ),
     },
     {
-      rotateY: this.interpolateMoveOffset(this.state.rotation.y),
+      rotateY: Animated.multiply(
+        this.ySign,
+        this.interpolateMoveOffset(this.state.rotation.y)
+      ),
     },
   ];
 
@@ -157,8 +174,8 @@ class Wobbly extends Component<Props, State> {
   getStateAndHelpers(): StateAndHelpers {
     return {
       // Prop Getters
-      getMoveWrapperProps: this.getMoveWrapperProps,
-      getWrapperTransformStyle: this.getWrapperTransformStyle,
+      getMoveTargetProps: this.getMoveTargetProps,
+      getWobblyTransformStyle: this.getWobblyTransformStyle,
       // State
       x: this.state.rotation.x,
       y: this.state.rotation.y,

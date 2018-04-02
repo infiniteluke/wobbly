@@ -213,6 +213,20 @@ wobbly manages the state needed to calculate `x, y` rotations for a parallax eff
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>flipX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : flip the sign on the x rotation transform style value
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>flipY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : flip the sign on the y rotation transform style value
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>children</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>?)</code>
           : Is called with the StateAndHelpers of wobbly.
 
@@ -284,14 +298,14 @@ wobbly manages the state needed to calculate `x, y` rotations for a parallax eff
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>getMoveWrapperProps</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          <span class='code bold'>getMoveTargetProps</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
           : prop getter - returns the props to spread into the element which controls the parallax effect by moving over it.
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>getWrapperTransformStyle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          <span class='code bold'>getWobblyTransformStyle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
           : prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on an "Animated" element to which a parallax effect should be added. NOTE: This element must be "Animated" like "Animated.VrButton".
 
           
