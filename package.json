@@ -1,6 +1,6 @@
 {
   "name": "wobbly",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "〰️ parallax all the things in react-vr",
   "main": "lib/wobbly.js",
   "repository": "git@github.com:infiniteluke/wobbly.git",
