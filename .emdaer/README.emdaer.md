@@ -140,7 +140,7 @@ or can be called from the render prop
 
 The paramters of this function can be split into two categories: State and Prop Getters.
 
-See the [API Docs](https://infiniteluke.github.io/dub-step/#stateandhelpers) for a list of these properties.
+See the [API Docs](https://infiniteluke.github.io/wobbly/#stateandhelpers) for a list of these properties.
 
 ## Examples
 Check out the [demo site](https://github.com/infiniteluke/wobbly-example) to see how wobbly 〰️ works in VR. See the [demo repo](https://infiniteluke.github.io/wobbly-example/) for the code behind the demo site.
