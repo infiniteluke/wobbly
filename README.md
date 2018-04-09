@@ -121,7 +121,7 @@ See the [API Docs](https://infiniteluke.github.io/wobbly/#stateandhelpers) for a
 
 ## Examples
 
-Check out the [demo site](https://github.com/infiniteluke/wobbly-example) to see how wobbly 〰️ works in VR. See the [demo repo](https://infiniteluke.github.io/wobbly-example/) for the code behind the demo site.
+Check out the [demo site](https://infiniteluke.github.io/wobbly-example/) to see how wobbly 〰️ works in VR. See the [demo repo](https://github.com/infiniteluke/wobbly-example) for the code behind the demo site.
 
 ## Contributing
 

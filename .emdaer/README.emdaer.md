@@ -143,7 +143,7 @@ The paramters of this function can be split into two categories: State and Prop 
 See the [API Docs](https://infiniteluke.github.io/wobbly/#stateandhelpers) for a list of these properties.
 
 ## Examples
-Check out the [demo site](https://github.com/infiniteluke/wobbly-example) to see how wobbly 〰️ works in VR. See the [demo repo](https://infiniteluke.github.io/wobbly-example/) for the code behind the demo site.
+Check out the [demo site](https://infiniteluke.github.io/wobbly-example/) to see how wobbly 〰️ works in VR. See the [demo repo](https://github.com/infiniteluke/wobbly-example) for the code behind the demo site.
 
 ## Contributing
 
