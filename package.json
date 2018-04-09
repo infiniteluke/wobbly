@@ -30,7 +30,7 @@
     "documentation": "documentation build src/** -f html -o docs",
     "size": "size-limit",
     "prepublish": "npm run flow-remove-types",
-    "precommit": "lint-staged && npm run lint && npm run test && npm run documentation && git add docs && npm run readme"
+    "precommit": "lint-staged && npm run size && npm run lint && npm run test && npm run documentation && git add docs && npm run readme"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
@@ -78,7 +78,7 @@
     {
       "path": "lib/wobbly.js",
       "webpack": false,
-      "limit": "2 KB"
+      "limit": "3 KB"
     }
   ],
   "jest": {
