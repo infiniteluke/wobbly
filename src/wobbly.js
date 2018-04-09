@@ -23,6 +23,7 @@ type Props = {
   flipY: boolean,
   children: RenderProp,
   render: RenderProp,
+  moveOnLatchOnly: boolean,
 };
 
 type State = {
@@ -30,6 +31,7 @@ type State = {
     x: number,
     y: number,
   },
+  latched: boolean,
 };
 
 /**
@@ -57,8 +59,9 @@ class Wobbly extends Component<Props, State> {
    * @property {number} [initialY=0] - initial y value in view, between 0 and 1
    * @property {number} [onExitSpringFriction=4] - controls "bounciness"/overshoot of the onExit animation
    * @property {number} [onExitSpringTension=40] - controls speed of onExit animation
-   * @property {number} [flipX=false] - flip the sign on the x rotation transform style value
-   * @property {number} [flipY=false] - flip the sign on the y rotation transform style value
+   * @property {boolean} [flipX=false] - flip the sign on the x rotation transform style value
+   * @property {boolean} [flipY=false] - flip the sign on the y rotation transform style value
+   * @property {boolean} [moveOnLatchOnly=false] - only map onMove events to state when "latched"
    * @property {function} [children] - Is called with the StateAndHelpers of wobbly.
    * @property {function} [render] - Is called with the StateAndHelpers of wobbly.
    * @see {@link https://facebook.github.io/react-vr/docs/view.html#hitslop|hitSlop react-vr docs}
@@ -73,32 +76,30 @@ class Wobbly extends Component<Props, State> {
     onExitSpringTension: 40,
     flipX: false,
     flipY: false,
+    moveOnLatchOnly: false,
   };
 
   /**
    * @type {object}
    * @private
    * @property {Object} rotation - state - The current x,y state
+   * @property {boolean} latched - state - Whether onMoved events will be mapped to rotation state
    */
   state = {
     rotation: {
       x: new Animated.Value(this.props.initialX),
       y: new Animated.Value(this.props.initialY),
     },
+    latched: this.props.moveOnLatchOnly ? false : true,
   };
-
-  parallaxDegreeRange = [
-    this.props.parallaxDegreeLowerBound,
-    this.props.parallaxDegreeUpperBound,
-  ];
-
-  xSign = this.props.flipX ? negativeValue : positiveValue;
-  ySign = this.props.flipY ? negativeValue : positiveValue;
 
   interpolateMoveOffset = (value: Animated.Value) =>
     value.interpolate({
       inputRange: MOVE_INPUT_RANGE,
-      outputRange: this.parallaxDegreeRange,
+      outputRange: [
+        this.props.parallaxDegreeLowerBound,
+        this.props.parallaxDegreeUpperBound,
+      ],
     });
 
   handleExit = () => {
@@ -112,6 +113,13 @@ class Wobbly extends Component<Props, State> {
       friction: this.props.onExitSpringFriction,
       tension: this.props.onExitSpringTension,
     }).start();
+    this.toggleLatch();
+  };
+
+  handleEnter = () => {
+    if (!this.props.moveOnLatchOnly) {
+      setTimeout(() => this.setState(() => ({ latched: true })), 30);
+    }
   };
 
   /**
@@ -123,24 +131,30 @@ class Wobbly extends Component<Props, State> {
    * @property {function} getWobblyTransformStyle - prop getter - returns the x,y state in a format the transform style property will take. Spread this into the style.transform array on an "Animated" element to which a parallax effect should be added. NOTE: This element must be "Animated" like "Animated.VrButton".
    * @property {number} x - state - x state value
    * @property {number} y - state - y state value
+   * @property {number} latched - state - the latched state
+   * @property {function} toggleLatch - action - function that toggles the latched date
    */
   getMoveTargetProps = (
     props: { onMove: () => void, onExit: () => void } = {
       onMove: () => {},
       onExit: () => {},
+      onEnter: () => {},
     }
   ) => ({
     ...props,
     onMove: callAll(
       props.onMove,
-      Animated.event([
-        {
-          nativeEvent: {
-            offset: [this.state.rotation.y, this.state.rotation.x],
-          },
-        },
-      ])
+      !this.state.latched
+        ? noop
+        : Animated.event([
+            {
+              nativeEvent: {
+                offset: [this.state.rotation.y, this.state.rotation.x],
+              },
+            },
+          ])
     ),
+    onEnter: callAll(props.onEnter, this.handleEnter),
     onExit: callAll(props.onExit, this.handleExit),
     hitSlop: {
       top: this.props.slop,
@@ -152,18 +166,18 @@ class Wobbly extends Component<Props, State> {
   getWobblyTransformStyle = () => [
     {
       rotateX: Animated.multiply(
-        this.xSign,
+        this.props.flipX ? negativeValue : positiveValue,
         this.interpolateMoveOffset(this.state.rotation.x)
       ),
     },
     {
       rotateY: Animated.multiply(
-        this.ySign,
+        this.props.flipY ? negativeValue : positiveValue,
         this.interpolateMoveOffset(this.state.rotation.y)
       ),
     },
   ];
-
+  toggleLatch = () => this.setState(({ latched }) => ({ latched: !latched }));
   /**
    * Returns state and helpers for render callback.
    * @private
@@ -179,6 +193,9 @@ class Wobbly extends Component<Props, State> {
       // State
       x: this.state.rotation.x,
       y: this.state.rotation.y,
+      latched: this.state.latched,
+      // Action
+      toggleLatch: this.toggleLatch,
     };
   }
 

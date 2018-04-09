@@ -65,7 +65,7 @@
     "metro-bundler": "^0.22.1",
     "ovrui": "^1.4.1",
     "prettier": "^1.7.0",
-    "prop-types": "^15.5.10",
+    "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-native": "^0.54.3",
     "react-vr": "^2.0.0",

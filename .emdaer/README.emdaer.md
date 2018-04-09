@@ -72,7 +72,7 @@ should be installed as one of your project's `dependencies`:
 npm install --save wobbly
 ```
 
-> This package also depends on `react-vr`, `react` and `prop-types`. Please make sure you have those installed as well.
+> This package also depends on `react-vr` and `react`. Please make sure you have those installed as well.
 
 ## Usage
 ```jsx

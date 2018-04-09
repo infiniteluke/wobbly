@@ -213,15 +213,22 @@ wobbly manages the state needed to calculate `x, y` rotations for a parallax eff
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>flipX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>flipX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : flip the sign on the x rotation transform style value
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>flipY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>flipY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : flip the sign on the y rotation transform style value
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>moveOnLatchOnly</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : only map onMove events to state when "latched"
 
           
         </div>
@@ -321,6 +328,20 @@ wobbly manages the state needed to calculate `x, y` rotations for a parallax eff
         <div class='space-bottom0'>
           <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
           : state - y state value
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>latched</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : state - the latched state
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toggleLatch</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          : action - function that toggles the latched date
 
           
         </div>
