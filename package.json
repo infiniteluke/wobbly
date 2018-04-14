@@ -38,8 +38,8 @@
   },
   "devDependencies": {
     "@emdaer/cli": "^2.0.0",
-    "@emdaer/core": "^2.0.0",
-    "@emdaer/plugin-contributors-details-github": "^2.0.0",
+    "@emdaer/core": "^2.0.2",
+    "@emdaer/plugin-contributors-details-github": "^2.0.1",
     "@emdaer/plugin-import": "^2.0.0",
     "@emdaer/plugin-license-reference": "^2.0.0",
     "@emdaer/plugin-shields": "^2.0.0",
